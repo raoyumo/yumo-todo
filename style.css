@@ -92,6 +92,19 @@ button:hover {
   color: #ffffff;
 }
 
+/* 批量操作按钮区域 */
+.actions {
+  margin-bottom: 14px;
+}
+
+.clear-btn {
+  background: #6b7280;
+}
+
+.clear-btn:hover {
+  background: #4b5563;
+}
+
 /* 列表样式 */
 .todo-list {
   list-style: none;

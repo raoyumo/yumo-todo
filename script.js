@@ -3,6 +3,7 @@ const form = document.getElementById('todo-form');
 const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
 const filterButtons = document.querySelectorAll('.filter-btn');
+const clearCompletedBtn = document.getElementById('clear-completed-btn');
 
 // 2) 定义 localStorage 的键名（用于保存/读取任务）
 const STORAGE_KEY = 'todo-items';
@@ -56,7 +57,12 @@ filterButtons.forEach(function (button) {
   });
 });
 
-// 7) 创建并插入一个任务项
+// 7) 监听“清除已完成”按钮：批量删除所有已完成任务
+clearCompletedBtn.addEventListener('click', function () {
+  clearCompletedTodos();
+});
+
+// 8) 创建并插入一个任务项
 // completed 参数用于“恢复本地数据时”指定是否已完成（默认 false）
 function addTodoItem(text, completed = false) {
   // 每个任务项是 li
@@ -109,7 +115,21 @@ function addTodoItem(text, completed = false) {
   list.appendChild(item);
 }
 
-// 8) 根据 currentFilter 过滤任务显示
+// 9) 清除所有已完成任务，并同步保存与筛选结果
+function clearCompletedTodos() {
+  const completedItems = list.querySelectorAll('.todo-item.completed');
+
+  // 遍历所有已完成任务并删除
+  completedItems.forEach(function (item) {
+    item.remove();
+  });
+
+  // 批量删除后，同步更新本地存储和当前筛选显示
+  saveTodos();
+  applyFilter();
+}
+
+// 10) 根据 currentFilter 过滤任务显示
 function applyFilter() {
   const items = list.querySelectorAll('.todo-item');
 
@@ -130,7 +150,7 @@ function applyFilter() {
   });
 }
 
-// 9) 把当前页面中的任务列表保存到 localStorage
+// 11) 把当前页面中的任务列表保存到 localStorage
 function saveTodos() {
   const todoData = [];
 
@@ -147,7 +167,7 @@ function saveTodos() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todoData));
 }
 
-// 10) 从 localStorage 读取任务并恢复到页面
+// 12) 从 localStorage 读取任务并恢复到页面
 function loadTodos() {
   const savedText = localStorage.getItem(STORAGE_KEY);
 
