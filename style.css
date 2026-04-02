@@ -39,7 +39,7 @@ h1 {
 .todo-form {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 #todo-input {
@@ -68,6 +68,28 @@ button {
 
 button:hover {
   background: #1d4ed8;
+}
+
+/* 筛选按钮区域 */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.filter-btn {
+  background: #e5e7eb;
+  color: #1f2937;
+  padding: 8px 12px;
+}
+
+.filter-btn:hover {
+  background: #d1d5db;
+}
+
+.filter-btn.active {
+  background: #2563eb;
+  color: #ffffff;
 }
 
 /* 列表样式 */

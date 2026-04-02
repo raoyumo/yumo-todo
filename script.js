@@ -2,14 +2,18 @@
 const form = document.getElementById('todo-form');
 const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
+const filterButtons = document.querySelectorAll('.filter-btn');
 
 // 2) 定义 localStorage 的键名（用于保存/读取任务）
 const STORAGE_KEY = 'todo-items';
 
-// 3) 页面加载时先恢复本地任务
+// 3) 当前筛选状态（all: 全部，active: 未完成，completed: 已完成）
+let currentFilter = 'all';
+
+// 4) 页面加载时先恢复本地任务
 loadTodos();
 
-// 4) 监听表单提交：添加任务
+// 5) 监听表单提交：添加任务
 form.addEventListener('submit', function (event) {
   // 阻止表单默认刷新页面行为
   event.preventDefault();
@@ -27,12 +31,32 @@ form.addEventListener('submit', function (event) {
   // 新增任务后立刻保存，确保刷新页面不会丢失
   saveTodos();
 
+  // 新增任务后按当前筛选条件重新显示
+  applyFilter();
+
   // 清空输入框并重新聚焦，方便继续输入
   input.value = '';
   input.focus();
 });
 
-// 5) 创建并插入一个任务项
+// 6) 监听筛选按钮点击：切换筛选条件
+filterButtons.forEach(function (button) {
+  button.addEventListener('click', function () {
+    // 读取按钮上的筛选类型
+    currentFilter = button.dataset.filter;
+
+    // 更新按钮高亮状态
+    filterButtons.forEach(function (btn) {
+      btn.classList.remove('active');
+    });
+    button.classList.add('active');
+
+    // 根据当前筛选类型显示任务
+    applyFilter();
+  });
+});
+
+// 7) 创建并插入一个任务项
 // completed 参数用于“恢复本地数据时”指定是否已完成（默认 false）
 function addTodoItem(text, completed = false) {
   // 每个任务项是 li
@@ -55,6 +79,9 @@ function addTodoItem(text, completed = false) {
 
     // 状态变化后马上保存
     saveTodos();
+
+    // 切换完成状态后，按当前筛选条件重新显示
+    applyFilter();
   });
 
   // 删除按钮
@@ -69,6 +96,9 @@ function addTodoItem(text, completed = false) {
 
     // 删除后马上保存
     saveTodos();
+
+    // 删除后按当前筛选条件重新显示
+    applyFilter();
   });
 
   // 把文字和删除按钮放进任务项
@@ -79,7 +109,28 @@ function addTodoItem(text, completed = false) {
   list.appendChild(item);
 }
 
-// 6) 把当前页面中的任务列表保存到 localStorage
+// 8) 根据 currentFilter 过滤任务显示
+function applyFilter() {
+  const items = list.querySelectorAll('.todo-item');
+
+  items.forEach(function (item) {
+    const isCompleted = item.classList.contains('completed');
+
+    // 默认先显示
+    let shouldShow = true;
+
+    if (currentFilter === 'active') {
+      shouldShow = !isCompleted;
+    } else if (currentFilter === 'completed') {
+      shouldShow = isCompleted;
+    }
+
+    // 通过 display 控制是否显示该任务
+    item.style.display = shouldShow ? 'flex' : 'none';
+  });
+}
+
+// 9) 把当前页面中的任务列表保存到 localStorage
 function saveTodos() {
   const todoData = [];
 
@@ -96,7 +147,7 @@ function saveTodos() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todoData));
 }
 
-// 7) 从 localStorage 读取任务并恢复到页面
+// 10) 从 localStorage 读取任务并恢复到页面
 function loadTodos() {
   const savedText = localStorage.getItem(STORAGE_KEY);
 
@@ -112,4 +163,7 @@ function loadTodos() {
   savedTodos.forEach(function (todo) {
     addTodoItem(todo.text, todo.completed);
   });
+
+  // 恢复完成后，应用当前筛选（默认是 all）
+  applyFilter();
 }

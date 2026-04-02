@@ -24,6 +24,13 @@
         <button type="submit">添加</button>
       </form>
 
+      <!-- 筛选区域：根据任务状态筛选显示 -->
+      <div class="filters" id="filters">
+        <button type="button" class="filter-btn active" data-filter="all">全部</button>
+        <button type="button" class="filter-btn" data-filter="active">未完成</button>
+        <button type="button" class="filter-btn" data-filter="completed">已完成</button>
+      </div>
+
       <!-- 任务列表：JavaScript 会把新任务插入到这里 -->
       <ul id="todo-list" class="todo-list"></ul>
     </main>
