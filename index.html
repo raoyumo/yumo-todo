@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>待办清单</title>
+    <!-- 引入页面样式 -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="todo-app">
+      <h1>待办清单</h1>
+      <p class="subtitle">一个适合新手学习的基础版本</p>
+
+      <!-- 输入区域：输入任务并点击按钮添加 -->
+      <form id="todo-form" class="todo-form">
+        <label for="todo-input" class="sr-only">输入任务</label>
+        <input
+          id="todo-input"
+          type="text"
+          placeholder="例如：学习 JavaScript 基础"
+          autocomplete="off"
+        />
+        <button type="submit">添加</button>
+      </form>
+
+      <!-- 筛选区域：根据任务状态筛选显示 -->
+      <div class="filters" id="filters">
+        <button type="button" class="filter-btn active" data-filter="all">全部</button>
+        <button type="button" class="filter-btn" data-filter="active">未完成</button>
+        <button type="button" class="filter-btn" data-filter="completed">已完成</button>
+      </div>
+
+      <!-- 批量操作：清除所有已完成任务 -->
+      <div class="actions">
+        <button type="button" id="clear-completed-btn" class="clear-btn">清除已完成</button>
+      </div>
+
+      <!-- 任务列表：JavaScript 会把新任务插入到这里 -->
+      <ul id="todo-list" class="todo-list"></ul>
+    </main>
+
+    <!-- 引入交互脚本 -->
+    <script src="script.js"></script>
+  </body>
+</html>
